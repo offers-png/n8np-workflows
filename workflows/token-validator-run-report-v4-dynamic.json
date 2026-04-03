@@ -77,12 +77,7 @@
         128
       ],
       "alwaysOutputData": true,
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
@@ -234,58 +229,9 @@
         ]
       ]
     },
-    "Token Exists?": {
-      "main": [
-        [
-          {
-            "node": "Lookup Token in Database",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Missing Token Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Lookup Token in Database": {
-      "main": [
-        [
-          {
-            "node": "Token Valid?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Token Valid?": {
-      "main": [
-        [
-          {
-            "node": "Search Google Maps",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "Invalid Token Response",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
+    "Token Exists?": "[REDACTED]",
+    "Lookup Token in Database": "[REDACTED]",
+    "Token Valid?": "[REDACTED]",
     "Search Google Maps": {
       "main": [
         [
@@ -420,12 +366,7 @@
           128
         ],
         "alwaysOutputData": true,
-        "credentials": {
-          "googleSheetsOAuth2Api": {
-            "id": "dDO8QdiXIAnd0lpz",
-            "name": "Google Sheets account 5"
-          }
-        }
+        "credentials": "[REDACTED]"
       },
       {
         "parameters": {
@@ -577,58 +518,9 @@
           ]
         ]
       },
-      "Token Exists?": {
-        "main": [
-          [
-            {
-              "node": "Lookup Token in Database",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "Missing Token Response",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Lookup Token in Database": {
-        "main": [
-          [
-            {
-              "node": "Token Valid?",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Token Valid?": {
-        "main": [
-          [
-            {
-              "node": "Search Google Maps",
-              "type": "main",
-              "index": 0
-            },
-            {
-              "node": "Merge",
-              "type": "main",
-              "index": 1
-            }
-          ],
-          [
-            {
-              "node": "Invalid Token Response",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
+      "Token Exists?": "[REDACTED]",
+      "Lookup Token in Database": "[REDACTED]",
+      "Token Valid?": "[REDACTED]",
       "Search Google Maps": {
         "main": [
           [
@@ -663,7 +555,7 @@
         ]
       }
     },
-    "authors": "saleh saleh",
+    "authors": "[REDACTED]",
     "name": null,
     "description": null
   },
