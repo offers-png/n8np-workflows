@@ -1,0 +1,433 @@
+{
+  "updatedAt": "2026-03-31T20:56:57.148Z",
+  "createdAt": "2025-11-21T14:47:56.736Z",
+  "id": "6pZrIcpIfdl4EzXt",
+  "name": "Daily report pos 7",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "3554d5cd-7fb2-4658-812c-249f046807c8",
+      "name": "Daily Report Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1P59OHquUhMo57B0GHaFwjbhldSt_5wCN7kz5g9l9S60",
+          "mode": "list",
+          "cachedResultName": "product pos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P59OHquUhMo57B0GHaFwjbhldSt_5wCN7kz5g9l9S60/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P59OHquUhMo57B0GHaFwjbhldSt_5wCN7kz5g9l9S60/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "4c23a6bd-d25b-4797-a123-942e802c4a19",
+      "name": "Read Sales Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        112,
+        208
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dDO8QdiXIAnd0lpz",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1LFrLMgyvShJhfzi7fk-8Lwb-_RsKVrwgvjxrVyB7Nps",
+          "mode": "list",
+          "cachedResultName": "Inventory pos 3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LFrLMgyvShJhfzi7fk-8Lwb-_RsKVrwgvjxrVyB7Nps/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1LFrLMgyvShJhfzi7fk-8Lwb-_RsKVrwgvjxrVyB7Nps/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "9017c1f6-3ee6-40a2-96c7-6c62fb127717",
+      "name": "Read Inventory Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        112,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dDO8QdiXIAnd0lpz",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const salesItems = $items(\"Read Sales Sheet\");\nconst inventoryItems = $items(\"Read Inventory Sheet\");\n\nreturn [{\n  json: {\n    sales: salesItems.map(i => i.json),\n    inventory: inventoryItems.map(i => i.json),\n    reportDate: new Date().toISOString().split('T')[0]\n  }\n}];\n"
+      },
+      "id": "636c171f-e723-4223-b520-89cdd4b43837",
+      "name": "Combine Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        560,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const { sales, inventory, reportDate } = items[0].json;\n\nreturn [\n  {\n    json: {\n      messages: [\n        {\n          role: \"system\",\n          content: `\nYou are an AI business analyst.\nYou MUST return ONLY valid JSON.\nDo NOT include explanations, markdown, or text.\n\nThe JSON MUST contain ALL of the following fields:\n\n{\n  \"reportDate\": \"string\",\n  \"totalRevenue\": number,\n  \"estimatedProfit\": number,\n  \"topSellingItems\": array,\n  \"slowMovingItems\": array,\n  \"lowStockWarnings\": array,\n  \"recommendations\": array\n}\n          `.trim()\n        },\n        {\n          role: \"user\",\n          content: JSON.stringify({\n            reportDate,\n            sales,\n            inventory\n          })\n        }\n      ]\n    }\n  }\n];\n"
+      },
+      "id": "e74c72d6-143f-4eb0-b39a-25ada96df5f6",
+      "name": "Prepare Report Prompt",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        784,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "8b0fe1dd-6731-4bd8-8e7f-d55f5fb95c39",
+      "name": "OpenAI - Generate Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        848
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const content = items[0].json.choices[0].message.content;\n\nlet parsed;\ntry {\n  parsed = JSON.parse(content);\n} catch (e) {\n  throw new Error(\"OpenAI did not return valid JSON\");\n}\n\nreturn [{\n  json: parsed\n}];\n"
+      },
+      "id": "272a4b7a-d64d-467a-a9fe-b66002f7e1d7",
+      "name": "Parse Report JSON",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1egKwlSt5gDoMhYX2LZP_T_sV-VoVP4Ee7HiRygfRymU",
+          "mode": "list",
+          "cachedResultName": "Daily report pos 7",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1egKwlSt5gDoMhYX2LZP_T_sV-VoVP4Ee7HiRygfRymU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1egKwlSt5gDoMhYX2LZP_T_sV-VoVP4Ee7HiRygfRymU/edit#gid=0"
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "date",
+              "fieldValue": "={{$json.reportDate}}"
+            },
+            {
+              "fieldId": "totalrevenue",
+              "fieldValue": "={{$json.totalRevenue}}"
+            },
+            {
+              "fieldId": "estimatedProfit",
+              "fieldValue": "={{$json.estimatedProfit}}"
+            },
+            {
+              "fieldId": "topSellingItems",
+              "fieldValue": "={{JSON.stringify($json.topSellingItems)}}"
+            },
+            {
+              "fieldId": " slowMovingItems",
+              "fieldValue": "={{JSON.stringify($json.slowMovingItems)}}"
+            },
+            {
+              "fieldId": " lowStockWarnings",
+              "fieldValue": "={{JSON.stringify($json.lowStockWarnings)}}"
+            },
+            {
+              "fieldId": "recommendations",
+              "fieldValue": "={{JSON.stringify($json.recommendations)}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e7250e76-3924-4953-82ef-775dc5ba0021",
+      "name": "Save Report Log",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1680,
+        304
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dDO8QdiXIAnd0lpz",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "url": "https://YOUR_SMS_API/messages",
+        "jsonParameters": true,
+        "options": {}
+      },
+      "id": "abbe0f2f-e2be-457c-9ebc-1099f573bc76",
+      "name": "Send Report SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-4o-mini"
+            },
+            {
+              "name": "messages",
+              "value": "={{ $json.messages }}"
+            },
+            {
+              "name": "=temperature",
+              "value": "={{0.3}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1008,
+        304
+      ],
+      "id": "0c992b51-aa53-4eab-b0e8-a2fbf4e81a42",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "r57fwb3ezUNGnIPg",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        336,
+        304
+      ],
+      "id": "d8878dbd-143c-4627-9939-64cc4a33cd5e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      date: $json.reportDate,\n      totalRevenue: $json.totalRevenue,\n      estimatedProfit: $json.estimatedProfit,\n\n      topSellingItems: ($json.topSellingItems || [])\n        .map(i => i.name)\n        .join(\", \"),\n\n      slowMovingItems: ($json.slowMovingItems || [])\n        .map(i => i.name)\n        .join(\", \"),\n\n      lowStockWarnings: ($json.lowStockWarnings || [])\n        .map(i => `${i.name} (qty: ${i.quantity}, min: ${i.minStock})`)\n        .join(\", \"),\n\n      recommendations: ($json.recommendations || []).join(\" | \")\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        304
+      ],
+      "id": "ea19deae-e43e-4ac4-bc54-d77a0bfa3602",
+      "name": "Format for Sheets"
+    }
+  ],
+  "connections": {
+    "Combine Data": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Report Prompt": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI - Generate Report": {
+      "main": [
+        []
+      ]
+    },
+    "Parse Report JSON": {
+      "main": [
+        [
+          {
+            "node": "Format for Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily Report Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Sales Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Inventory Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Inventory Sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Read Sales Sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Parse Report JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Combine Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format for Sheets": {
+      "main": [
+        [
+          {
+            "node": "Save Report Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "EB95HFPIVjpoSVFl",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "2161fcf0-1761-44de-afd1-3e86d8a4c7e9",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-11-21T14:47:56.739Z",
+      "createdAt": "2025-11-21T14:47:56.739Z",
+      "role": "workflow:owner",
+      "workflowId": "6pZrIcpIfdl4EzXt",
+      "projectId": "EcobcwWAxGXzBQMt"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
