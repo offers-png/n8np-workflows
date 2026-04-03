@@ -63,12 +63,7 @@
       ],
       "id": "83836c73-66f1-428a-bca8-d8dbafae0efd",
       "name": "help_log",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      },
+      "credentials": "[REDACTED]",
       "disabled": true
     },
     {
@@ -89,12 +84,7 @@
       ],
       "id": "018b7d72-bef7-4727-bb80-222e3bf0cd95",
       "name": "OpenAI Chat Model4",
-      "credentials": {
-        "openAiApi": {
-          "id": "Cs1YHuvIMrtAjIQ3",
-          "name": "OpenAi account 3"
-        }
-      },
+      "credentials": "[REDACTED]",
       "disabled": true
     },
     {
