@@ -108,12 +108,7 @@
         -112,
         16
       ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
@@ -162,12 +157,7 @@
       ],
       "id": "76156d3d-f245-44cc-a9e5-15592869334d",
       "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "Cs1YHuvIMrtAjIQ3",
-          "name": "OpenAi account 3"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
