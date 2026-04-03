@@ -1,0 +1,671 @@
+{
+  "updatedAt": "2026-02-25T22:22:37.412Z",
+  "createdAt": "2025-12-26T22:08:13.749Z",
+  "id": "09GH4TIQREhPN1ha",
+  "name": "Token Validator → Run Report V4 DYNAMIC",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "run-report",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d6a07332-a382-47cb-93c9-de26bb3d6624",
+      "name": "Customer Access Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -896,
+        240
+      ],
+      "webhookId": "run-report-validator-v3-secure"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.query.token}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "8204a539-ad26-47b5-89be-0385f98395ed",
+      "name": "Token Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE",
+          "mode": "list",
+          "cachedResultName": "Customer Access Tokens",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Token",
+              "lookupValue": "={{ $json.query.token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b4d1d8b7-f65c-4c02-960d-c1227e9b736a",
+      "name": "Lookup Token in Database",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -448,
+        128
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dDO8QdiXIAnd0lpz",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.Token }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "a70974a8-afa2-4bc4-9a66-e5b4252da41b",
+      "name": "Token Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_local"
+            },
+            {
+              "name": "q",
+              "value": "={{ $('Lookup Token in Database').first().json.Business_Type }} in {{ $('Lookup Token in Database').first().json.City }} {{ $('Lookup Token in Database').first().json.State }}"
+            },
+            {
+              "name": "api_key",
+              "value": "ccc7f79051453dd20a641dc3f0b45a702f8699ec799d908b81b876638eec98ab"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5cbfa3fd-1206-4b7e-bb26-1905b2c0cb69",
+      "name": "Search Google Maps",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $input.item.json.local_results || [];\nconst tokenRow = $('Lookup Token in Database').first().json;\nconst Token = tokenRow.Token;\nconst business_type = tokenRow.Business_Type || 'business';\nconst city = tokenRow.City || '';\nconst state = tokenRow.State || '';\n\nif (!results.length) {\n  return [{ json: { error: 'No competitors found', token: Token } }];\n}\n\nconst competitors = results.map(biz => {\n  const reviews = biz.reviews || 0;\n  const rating = biz.rating || 0;\n  let status = 'quiet', urgency = 0;\n  if (reviews > 100 && rating >= 4.7) { status = 'market_leader'; urgency = 10; }\n  else if (reviews > 50 && rating >= 4.5) { status = 'busy'; urgency = 7; }\n  else if (reviews > 20 && rating >= 4.0) { status = 'active'; urgency = 4; }\n  return { name: biz.title, rating, reviews, status, urgency, phone: biz.phone || 'N/A' };\n});\n\nconst avgRating = (competitors.reduce((s,c) => s+c.rating, 0) / competitors.length).toFixed(2);\nconst avgReviews = Math.round(competitors.reduce((s,c) => s+c.reviews, 0) / competitors.length);\nconst avgUrgency = competitors.reduce((s,c) => s+c.urgency, 0) / competitors.length;\nconst marketTemp = avgUrgency > 7 ? 'HOT' : avgUrgency > 4 ? 'WARM' : 'COLD';\n\nreturn [{ json: {\n  Token,\n  scan_date: new Date().toISOString(),\n  business_type,\n  location: { city, state },\n  market_intelligence: {\n    temperature: marketTemp,\n    avg_competitor_rating: parseFloat(avgRating),\n    avg_competitor_reviews: avgReviews,\n    total_competitors: competitors.length,\n    market_leaders: competitors.filter(c => c.status === 'market_leader').length,\n    saturation_level: competitors.length > 15 ? 'HIGH' : competitors.length > 8 ? 'MEDIUM' : 'LOW'\n  },\n  pricing_recommendation: marketTemp === 'HOT' ? '🔥 DO NOT DISCOUNT' : marketTemp === 'WARM' ? '⚖️ MATCH MARKET' : '💰 UNDERCUT OPPORTUNITY',\n  action_today: marketTemp === 'HOT' ? 'Raise your minimum price' : marketTemp === 'WARM' ? 'Call 3 past customers for referrals' : 'Post a before-and-after photo with small promo',\n  top_5_competitors: competitors.sort((a,b) => b.reviews-a.reviews).slice(0,5).map((c,i) => ({\n    rank: i+1, name: c.name, rating: c.rating, reviews: c.reviews, phone: c.phone, status: c.status,\n    threat_level: c.reviews > 100 ? 'HIGH' : c.reviews > 50 ? 'MEDIUM' : 'LOW'\n  }))\n}}];"
+      },
+      "id": "84402d4d-c2e1-441d-9862-f54935b2013c",
+      "name": "Build Competitor Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "d16c322b-6abe-4085-b0fd-3e12e36ff346",
+      "name": "Return Report to Customer",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "❌ Missing Access Token\n\nPlease use the complete link from your purchase email.\n\nNeed help? Contact: offers@dealdily.com",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "id": "8e0e0935-2257-4a53-b0d4-8669e7a8757d",
+      "name": "Missing Token Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -448,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "🚫 Invalid Access Token\n\nThis link is not valid. Please check your purchase email for the correct link.\n\nIf you believe this is an error, contact: offers@dealdily.com",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "id": "100ad432-39fb-4805-ba7f-47aadfdc7151",
+      "name": "Invalid Token Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        288
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        32
+      ],
+      "id": "edd5488f-43f7-4933-881b-fe6d13448ed2",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "Customer Access Webhook": {
+      "main": [
+        [
+          {
+            "node": "Token Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Exists?": {
+      "main": [
+        [
+          {
+            "node": "Lookup Token in Database",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Missing Token Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Token in Database": {
+      "main": [
+        [
+          {
+            "node": "Token Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Valid?": {
+      "main": [
+        [
+          {
+            "node": "Search Google Maps",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Invalid Token Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Google Maps": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Competitor Report": {
+      "main": [
+        [
+          {
+            "node": "Return Report to Customer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Build Competitor Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "7f9ec6dd-b103-4ec0-acbf-fefd66d99bc8",
+  "activeVersionId": "7f9ec6dd-b103-4ec0-acbf-fefd66d99bc8",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-26T22:08:13.751Z",
+      "createdAt": "2025-12-26T22:08:13.751Z",
+      "role": "workflow:owner",
+      "workflowId": "09GH4TIQREhPN1ha",
+      "projectId": "EcobcwWAxGXzBQMt"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-25T22:22:37.413Z",
+    "createdAt": "2026-02-25T22:22:37.413Z",
+    "versionId": "7f9ec6dd-b103-4ec0-acbf-fefd66d99bc8",
+    "workflowId": "09GH4TIQREhPN1ha",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "run-report",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "d6a07332-a382-47cb-93c9-de26bb3d6624",
+        "name": "Customer Access Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -896,
+          240
+        ],
+        "webhookId": "run-report-validator-v3-secure"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{$json.query.token}}",
+                "operation": "isNotEmpty"
+              }
+            ]
+          }
+        },
+        "id": "8204a539-ad26-47b5-89be-0385f98395ed",
+        "name": "Token Exists?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [
+          -672,
+          240
+        ]
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE",
+            "mode": "list",
+            "cachedResultName": "Customer Access Tokens",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZUDI29OpEkzIfTN3KBY1LZoXiSiAxLryp_rdLYzpJEE/edit#gid=0"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Token",
+                "lookupValue": "={{ $json.query.token }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "b4d1d8b7-f65c-4c02-960d-c1227e9b736a",
+        "name": "Lookup Token in Database",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -448,
+          128
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "dDO8QdiXIAnd0lpz",
+            "name": "Google Sheets account 5"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.Token }}",
+                "operation": "isNotEmpty"
+              }
+            ]
+          }
+        },
+        "id": "a70974a8-afa2-4bc4-9a66-e5b4252da41b",
+        "name": "Token Valid?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [
+          -224,
+          128
+        ]
+      },
+      {
+        "parameters": {
+          "url": "https://serpapi.com/search.json",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "engine",
+                "value": "google_local"
+              },
+              {
+                "name": "q",
+                "value": "={{ $('Lookup Token in Database').first().json.Business_Type }} in {{ $('Lookup Token in Database').first().json.City }} {{ $('Lookup Token in Database').first().json.State }}"
+              },
+              {
+                "name": "api_key",
+                "value": "ccc7f79051453dd20a641dc3f0b45a702f8699ec799d908b81b876638eec98ab"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "5cbfa3fd-1206-4b7e-bb26-1905b2c0cb69",
+        "name": "Search Google Maps",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          0,
+          0
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const results = $input.item.json.local_results || [];\nconst tokenRow = $('Lookup Token in Database').first().json;\nconst Token = tokenRow.Token;\nconst business_type = tokenRow.Business_Type || 'business';\nconst city = tokenRow.City || '';\nconst state = tokenRow.State || '';\n\nif (!results.length) {\n  return [{ json: { error: 'No competitors found', token: Token } }];\n}\n\nconst competitors = results.map(biz => {\n  const reviews = biz.reviews || 0;\n  const rating = biz.rating || 0;\n  let status = 'quiet', urgency = 0;\n  if (reviews > 100 && rating >= 4.7) { status = 'market_leader'; urgency = 10; }\n  else if (reviews > 50 && rating >= 4.5) { status = 'busy'; urgency = 7; }\n  else if (reviews > 20 && rating >= 4.0) { status = 'active'; urgency = 4; }\n  return { name: biz.title, rating, reviews, status, urgency, phone: biz.phone || 'N/A' };\n});\n\nconst avgRating = (competitors.reduce((s,c) => s+c.rating, 0) / competitors.length).toFixed(2);\nconst avgReviews = Math.round(competitors.reduce((s,c) => s+c.reviews, 0) / competitors.length);\nconst avgUrgency = competitors.reduce((s,c) => s+c.urgency, 0) / competitors.length;\nconst marketTemp = avgUrgency > 7 ? 'HOT' : avgUrgency > 4 ? 'WARM' : 'COLD';\n\nreturn [{ json: {\n  Token,\n  scan_date: new Date().toISOString(),\n  business_type,\n  location: { city, state },\n  market_intelligence: {\n    temperature: marketTemp,\n    avg_competitor_rating: parseFloat(avgRating),\n    avg_competitor_reviews: avgReviews,\n    total_competitors: competitors.length,\n    market_leaders: competitors.filter(c => c.status === 'market_leader').length,\n    saturation_level: competitors.length > 15 ? 'HIGH' : competitors.length > 8 ? 'MEDIUM' : 'LOW'\n  },\n  pricing_recommendation: marketTemp === 'HOT' ? '🔥 DO NOT DISCOUNT' : marketTemp === 'WARM' ? '⚖️ MATCH MARKET' : '💰 UNDERCUT OPPORTUNITY',\n  action_today: marketTemp === 'HOT' ? 'Raise your minimum price' : marketTemp === 'WARM' ? 'Call 3 past customers for referrals' : 'Post a before-and-after photo with small promo',\n  top_5_competitors: competitors.sort((a,b) => b.reviews-a.reviews).slice(0,5).map((c,i) => ({\n    rank: i+1, name: c.name, rating: c.rating, reviews: c.reviews, phone: c.phone, status: c.status,\n    threat_level: c.reviews > 100 ? 'HIGH' : c.reviews > 50 ? 'MEDIUM' : 'LOW'\n  }))\n}}];"
+        },
+        "id": "84402d4d-c2e1-441d-9862-f54935b2013c",
+        "name": "Build Competitor Report",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          448,
+          32
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "name": "Access-Control-Allow-Origin",
+                  "value": "*"
+                }
+              ]
+            }
+          }
+        },
+        "id": "d16c322b-6abe-4085-b0fd-3e12e36ff346",
+        "name": "Return Report to Customer",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          672,
+          32
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "❌ Missing Access Token\n\nPlease use the complete link from your purchase email.\n\nNeed help? Contact: offers@dealdily.com",
+          "options": {
+            "responseCode": 400
+          }
+        },
+        "id": "8e0e0935-2257-4a53-b0d4-8669e7a8757d",
+        "name": "Missing Token Response",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          -448,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "🚫 Invalid Access Token\n\nThis link is not valid. Please check your purchase email for the correct link.\n\nIf you believe this is an error, contact: offers@dealdily.com",
+          "options": {
+            "responseCode": 403
+          }
+        },
+        "id": "100ad432-39fb-4805-ba7f-47aadfdc7151",
+        "name": "Invalid Token Response",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          0,
+          288
+        ]
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          224,
+          32
+        ],
+        "id": "edd5488f-43f7-4933-881b-fe6d13448ed2",
+        "name": "Merge"
+      }
+    ],
+    "connections": {
+      "Customer Access Webhook": {
+        "main": [
+          [
+            {
+              "node": "Token Exists?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Token Exists?": {
+        "main": [
+          [
+            {
+              "node": "Lookup Token in Database",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Missing Token Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lookup Token in Database": {
+        "main": [
+          [
+            {
+              "node": "Token Valid?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Token Valid?": {
+        "main": [
+          [
+            {
+              "node": "Search Google Maps",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ],
+          [
+            {
+              "node": "Invalid Token Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Google Maps": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Competitor Report": {
+        "main": [
+          [
+            {
+              "node": "Return Report to Customer",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Build Competitor Report",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "saleh saleh",
+    "name": null,
+    "description": null
+  },
+  "tags": []
+}
