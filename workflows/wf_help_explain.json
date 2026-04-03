@@ -1,0 +1,263 @@
+{
+  "updatedAt": "2026-03-31T20:56:56.981Z",
+  "createdAt": "2025-12-24T01:21:04.117Z",
+  "id": "7gMVnXGODsZoH1fe",
+  "name": "WF_Help_Explain",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1KPRycASvoAIMvmPyoGXjr3FZhsYNiHK78s6oo9pcH74",
+          "mode": "list",
+          "cachedResultName": "HELP",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KPRycASvoAIMvmPyoGXjr3FZhsYNiHK78s6oo9pcH74/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KPRycASvoAIMvmPyoGXjr3FZhsYNiHK78s6oo9pcH74/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            " timestamp": "={{ $json.timestamp || new Date().toISOString() }}",
+            " text": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": " timestamp",
+              "displayName": " timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": " text",
+              "displayName": " text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        608
+      ],
+      "id": "83836c73-66f1-428a-bca8-d8dbafae0efd",
+      "name": "help_log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dDO8QdiXIAnd0lpz",
+          "name": "Google Sheets account 5"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "gpt-4"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        32,
+        832
+      ],
+      "id": "018b7d72-bef7-4727-bb80-222e3bf0cd95",
+      "name": "OpenAI Chat Model4",
+      "credentials": {
+        "openAiApi": {
+          "id": "Cs1YHuvIMrtAjIQ3",
+          "name": "OpenAi account 3"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are an AI assistant running in STRICT TEST MODE.\n\nYour ONLY job is to evaluate the user's message and respond based on the rules below.\nDo not add context. Do not invent problems. Do not repeat greetings.\n\nRULES (MANDATORY):\n\n1. If the message is exactly a greeting (hi, hello, hey):\n   Respond ONLY with:\n   \"Hello. What would you like help with?\"\n\n2. If the message asks for help but gives no topic:\n   Respond ONLY with:\n   \"Please describe the problem you want help with.\"\n\n3. If the message is a factual question (example: math, definition):\n   Answer it directly in one sentence.\n\n4. If the message describes a problem:\n   Respond with a brief explanation of the problem only.\n   DO NOT give troubleshooting steps yet.\n\n5. Never assume devices, software, or errors unless explicitly stated.\n\n6. Never respond with \"Understood\", \"Okay\", or acknowledgements.\n\nIf a response does not match a rule, do nothing.\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -48,
+        608
+      ],
+      "id": "05b117bb-e269-4c5d-abc4-184af527922c",
+      "name": "LLM_Help_Responder",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n“Accepts any input. Returns human-readable explanations. Never errors.”"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -112,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "77000220-36e2-4e74-84dc-7f861a41625d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        608
+      ],
+      "id": "97518d8f-ca91-4a2e-a2ee-f33c05c74783",
+      "name": "When Executed by Another Workflow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3fed84fc-6664-4ced-9109-269247fad295",
+              "name": "response",
+              "value": "={{ $node[\"LLM_Help_Responder\"].json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        608
+      ],
+      "id": "260440b3-4278-43e4-97f9-03b6924f4f5e",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    text: $json.message\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        608
+      ],
+      "id": "e8b90842-538e-45d2-aad1-de1ee9ca9113",
+      "name": "format",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM_Help_Responder",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM_Help_Responder": {
+      "main": [
+        [
+          {
+            "node": "help_log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "LLM_Help_Responder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "help_log": {
+      "main": [
+        [
+          {
+            "node": "format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "EB95HFPIVjpoSVFl",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "2c18e4c2-5ed1-4131-a36e-e9479b38c86d",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-24T01:21:04.119Z",
+      "createdAt": "2025-12-24T01:21:04.119Z",
+      "role": "workflow:owner",
+      "workflowId": "7gMVnXGODsZoH1fe",
+      "projectId": "EcobcwWAxGXzBQMt"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
