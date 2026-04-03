@@ -45,12 +45,7 @@
       ],
       "id": "47babaf9-43e3-4f0f-ad95-58ac5319b456",
       "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "veEsh5yte0PUtNY3",
-          "name": "OpenAi account 2"
-        }
-      },
+      "credentials": "[REDACTED]",
       "disabled": true
     },
     {
@@ -538,12 +533,7 @@
       "id": "24a755a1-3e0a-4b27-bf0c-c366922a255b",
       "name": "Send email",
       "webhookId": "04add016-39dd-4dd6-a364-70e2b8a4bf71",
-      "credentials": {
-        "smtp": {
-          "id": "q8fNt7fNGWmNfpoD",
-          "name": "SMTP account 2"
-        }
-      },
+      "credentials": "[REDACTED]",
       "disabled": true
     },
     {
@@ -986,12 +976,7 @@
         ],
         "id": "47babaf9-43e3-4f0f-ad95-58ac5319b456",
         "name": "OpenAI Chat Model",
-        "credentials": {
-          "openAiApi": {
-            "id": "veEsh5yte0PUtNY3",
-            "name": "OpenAi account 2"
-          }
-        },
+        "credentials": "[REDACTED]",
         "disabled": true
       },
       {
@@ -1479,12 +1464,7 @@
         "id": "24a755a1-3e0a-4b27-bf0c-c366922a255b",
         "name": "Send email",
         "webhookId": "04add016-39dd-4dd6-a364-70e2b8a4bf71",
-        "credentials": {
-          "smtp": {
-            "id": "q8fNt7fNGWmNfpoD",
-            "name": "SMTP account 2"
-          }
-        },
+        "credentials": "[REDACTED]",
         "disabled": true
       },
       {
@@ -1855,7 +1835,7 @@
         ]
       }
     },
-    "authors": "saleh saleh",
+    "authors": "[REDACTED]",
     "name": null,
     "description": null
   },
