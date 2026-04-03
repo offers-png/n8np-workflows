@@ -43,12 +43,7 @@
         112,
         208
       ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
@@ -76,12 +71,7 @@
         112,
         400
       ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
@@ -111,7 +101,7 @@
     },
     {
       "parameters": {
-        "authentication": "genericCredentialType",
+        "authentication": "[REDACTED]",
         "url": "https://api.openai.com/v1/chat/completions",
         "jsonParameters": true,
         "options": {}
@@ -197,16 +187,11 @@
         1680,
         304
       ],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "dDO8QdiXIAnd0lpz",
-          "name": "Google Sheets account 5"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {
-        "authentication": "genericCredentialType",
+        "authentication": "[REDACTED]",
         "url": "https://YOUR_SMS_API/messages",
         "jsonParameters": true,
         "options": {}
@@ -224,8 +209,8 @@
       "parameters": {
         "method": "POST",
         "url": "https://api.openai.com/v1/chat/completions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
+        "authentication": "[REDACTED]",
+        "genericAuthType": "[REDACTED]",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -262,12 +247,7 @@
       ],
       "id": "0c992b51-aa53-4eab-b0e8-a2fbf4e81a42",
       "name": "HTTP Request",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "r57fwb3ezUNGnIPg",
-          "name": "Header Auth account"
-        }
-      }
+      "credentials": "[REDACTED]"
     },
     {
       "parameters": {},
