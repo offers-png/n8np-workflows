@@ -1,0 +1,1863 @@
+{
+  "updatedAt": "2026-01-22T21:52:10.262Z",
+  "createdAt": "2025-09-10T16:50:15.188Z",
+  "id": "0lI40xZ82P2Ifvr7",
+  "name": "affiliateLink",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16288,
+        1025.5
+      ],
+      "id": "85339d5c-fc2c-416e-89d0-52eecdcd8673",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-3.5-turbo"
+        },
+        "options": {
+          "temperature": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -15544,
+        528
+      ],
+      "id": "47babaf9-43e3-4f0f-ad95-58ac5319b456",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "veEsh5yte0PUtNY3",
+          "name": "OpenAi account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Monday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "07868b61-3d3b-467f-b7f3-8490011e770c"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "53317511-84e8-4a3a-9b7e-ef56179a0bdf",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Tuesday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d5394c53-63cc-4354-93d0-99996a9f1e5d",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Wednesday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "16fa2c01-c1b6-46ba-ab5f-b01b53fe006e",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Thursday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4cb6fbf7-32e4-474b-b3d1-ff5d25690b40",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Friday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8608f99e-f7e2-4ac3-b423-471bf1bfd4fb",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Saturday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "26e659eb-9793-48eb-ac42-eccbf59d239f",
+                    "leftValue": "={{$json[\"Day of week\"]}}",
+                    "rightValue": "Sunday",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -16064,
+        945.5
+      ],
+      "id": "7779a228-edde-48ed-a212-86e1e27793f4",
+      "name": "Switch",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f896017d-c0c7-40d5-b230-12c1ba4e5e54",
+              "name": "productName",
+              "value": "superfood wellness formula",
+              "type": "string"
+            },
+            {
+              "id": "dd5bcce0-6a8b-475a-98ec-1d8a1bdf2daa",
+              "name": "affiliateLink",
+              "value": "https://mdrnremedy.com/#aff=Igotwatuwant",
+              "type": "string"
+            },
+            {
+              "id": "68b86ef1-ba7b-4ad9-8739-a58cfcd6c555",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/PKM4L06W.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        1436
+      ],
+      "id": "e825c558-d6cf-4fdd-9592-69853d9dd1e5",
+      "name": "Friday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8d43fa5d-0515-452b-9e6c-5356ff871188",
+              "name": "productName",
+              "value": "online income course",
+              "type": "string"
+            },
+            {
+              "id": "beadf0e7-a532-46fc-92d7-404e15081e7f",
+              "name": "affiliateLink",
+              "value": "https://www.digistore24.com/redir/361682/Igotwatuwant/",
+              "type": "string"
+            },
+            {
+              "id": "f1a44258-5054-4adf-a515-b79c47615605",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/753WV7C5.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        1628
+      ],
+      "id": "5c832023-c38f-4ce7-ae27-41943133aa7b",
+      "name": "Saturday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "472db552-a384-4126-97ea-844a7c9bd2e8",
+              "name": "productName",
+              "value": "weight & metabolism booster",
+              "type": "string"
+            },
+            {
+              "id": "fce4a2bf-8ad4-455a-bb8e-f0d74d21579b",
+              "name": "affiliateLink",
+              "value": "https://getsumatratonic.com/welcome/#aff=Igotwatuwant",
+              "type": "string"
+            },
+            {
+              "id": "84fbdac5-5c81-46c1-a677-313c03447fc1",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/Z31C6LOM.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        668
+      ],
+      "id": "4d922303-5883-4f45-92a4-e011d28acc7e",
+      "name": "Tuesday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62f4cf05-52fc-4ad1-bd6e-70e02859ba5a",
+              "name": "productName",
+              "value": "prostate men's health supplement",
+              "type": "string"
+            },
+            {
+              "id": "7780fe05-6744-4f34-aeaa-889f24c66065",
+              "name": "affiliateLink",
+              "value": "https://getfluxactive.cc/vslv1/#aff=Igotwatuwant",
+              "type": "string"
+            },
+            {
+              "id": "10574d02-bdbc-4a09-90b5-42a8bfd693ef",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/product-main-2.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        429.5
+      ],
+      "id": "1ff030d4-828e-4097-95c6-efdc816fd788",
+      "name": "Monday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03f58a67-e35a-437c-900b-2ffc4c67ac07",
+              "name": "productName",
+              "value": "gut health & weight support",
+              "type": "string"
+            },
+            {
+              "id": "1f89a743-055f-4c35-b25a-02225905fcc1",
+              "name": "affiliateLink",
+              "value": "https://gutoptim24.com/text.php#aff=Igotwatuwant",
+              "type": "string"
+            },
+            {
+              "id": "d24593a0-52c5-4459-950e-038250c13836",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/1OCSG6OJ.png",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        860
+      ],
+      "id": "40d179d9-7f9a-4734-878a-c26f6c02fc15",
+      "name": "Wednesday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "084ceb39-a6b8-41b7-8d5b-c53bdfe41454",
+              "name": "productName",
+              "value": "business/you tube course ",
+              "type": "string"
+            },
+            {
+              "id": "94bc53f3-ccce-4ff7-be14-ae5281494fd3",
+              "name": "affiliateLink",
+              "value": "https://mattpar.com/tube-mastery-ds#aff=Igotwatuwant",
+              "type": "string"
+            },
+            {
+              "id": "d697659b-7556-4cbd-a356-32cfd5f0ced8",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/SQVYFZ6P.png",
+              "type": "string"
+            },
+            {
+              "id": "c40f8191-dc3b-40e2-9fae-f5f156be9228",
+              "name": " Email",
+              "value": "uses imageUrl",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        1052
+      ],
+      "id": "a58f64f3-7565-420d-b3f3-3236195b6741",
+      "name": "Thursday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "128c4291-ee1f-46ab-8582-bee660108e59",
+              "name": "productName",
+              "value": "crypto education & community",
+              "type": "string"
+            },
+            {
+              "id": "38a25e7f-7860-4932-bb06-6f33842ac84d",
+              "name": "affiliateLink",
+              "value": "https://www.digistore24.com/redir/363385/Igotwatuwant/",
+              "type": "string"
+            },
+            {
+              "id": "37f23c55-c289-497e-a65b-38ddd7afc3a0",
+              "name": " imageUrl",
+              "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/2Z70CKHM.jpg",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15840,
+        1244
+      ],
+      "id": "a17152aa-fc31-45ad-8a3f-bd0657957704",
+      "name": "Sunday",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are generating an affiliate email for THIS product ONLY.\n\nProduct name:\n{{$json.productName}}\n\nAffiliate link:\n{{$json.affiliateLink}}\n\nSTRICT RULES:\n- Use ONLY the product and link above\n- Do NOT invent products\n- Do NOT replace the affiliate link\n- If the link mentions back pain, write about back pain\n- If the link is skincare, write about skincare\n- Match the product category exactly\n\nFORMAT EXACTLY LIKE THIS:\n\nSUBJECT:\n<one compelling subject line>\n\nBODY:\n<short persuasive body explaining what it helps with, who it's for, key benefits>\n\nPRODUCT_NAME:\n{{$json.productName}}\n\nAFFILIATE_LINK:\n{{$json.affiliateLink}}\n\nimageUrl\n{{ $json[' imageUrl'] }}\n\nDo not explain.\nDo not add anything else.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -15616,
+        304
+      ],
+      "id": "ef219f11-7f86-47b9-8b84-2bbb92c9c2d5",
+      "name": "AI Agent 1  (Generate Email Content)",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -15264,
+        1032
+      ],
+      "id": "49c40c64-da19-43a7-965d-4523634e1de9",
+      "name": "Merge",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "fromEmail": "offers@dealdily.com",
+        "toEmail": "saleh852@gmail.com",
+        "subject": "={{ $json.subject }} ",
+        "html": "=<h2>{{ $json.subject }}</h2>\n\n<p>{{ $json.body }}</p>\n\n<p><strong>Product:</strong> {{ $json.productName }}</p>\n\n<p>\n  <a href=\"{{ $json.affiliateLink }}\"\n     style=\"padding:12px 18px;background:#0b5cff;color:#fff;\n     text-decoration:none;border-radius:6px;font-weight:bold;\">\n     👉 Shop Now\n  </a>\n</p>\n\n<p style=\"font-size:12px;color:#777;\">\nIf the button doesn’t work, copy & paste:<br>\n{{ $json.affiliateLink }}\n</p>\n\n<img \n  src=\"{{ $json.imageUrl }}\" \n  alt=\"Product image\"\n  style=\"\n    width:100%;\n    max-width:600px;\n    display:block;\n    margin:0 auto 20px auto;\n    border-radius:12px;\n  \"\n/>\n\n<p style=\"font-size:12px;color:#666;\">\nIf you no longer want these emails, \n<a href=\"https://yourdomain.com/unsubscribe?email={{$json.email}}\">\nunsubscribe here\n</a>.\n</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -14144,
+        716
+      ],
+      "id": "24a755a1-3e0a-4b27-bf0c-c366922a255b",
+      "name": "Send email",
+      "webhookId": "04add016-39dd-4dd6-a364-70e2b8a4bf71",
+      "credentials": {
+        "smtp": {
+          "id": "q8fNt7fNGWmNfpoD",
+          "name": "SMTP account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get AI output text\nconst text = $json.output;\n\n// Helper to extract values after labels\nfunction extract(label) {\n  const idx = text.indexOf(label);\n  if (idx === -1) return \"\";\n  return text\n    .slice(idx + label.length)\n    .trim()\n    .split(\"\\n\")[0]\n    .trim();\n}\n\n// n8n REQUIRES returning an ARRAY\n  return [\n  {\n    subject: extract(\"SUBJECT:\"),\n    body: extract(\"BODY:\"),\n    productName: extract(\"PRODUCT_NAME:\"),\n    affiliateLink: extract(\"AFFILIATE_LINK:\")\n    // ❌ NO imageUrl here\n  }\n];\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -15040,
+        256
+      ],
+      "id": "f9e071a9-86cc-4e4e-8d40-0f33a24b3b0a",
+      "name": "Email Fields (subject & body)",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f70be1aa-d157-4587-ad07-1e0451c95477",
+              "name": "imageUrl",
+              "value": "={{ $json[' imageUrl'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -15040,
+        1032
+      ],
+      "id": "5946d072-6553-4070-a92a-d7d597a9b2e1",
+      "name": "Edit Fields3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -14816,
+        716
+      ],
+      "id": "dd99670d-c0e2-439f-9208-fda038d169b6",
+      "name": "Merge1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -14592,
+        716
+      ],
+      "id": "724f0a9d-66d2-4a91-a28f-a0303fa977e0",
+      "name": "Loop Over Items",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -14368,
+        716
+      ],
+      "id": "18b20877-b1cd-4c7a-ae75-41ee34163013",
+      "name": "Wait",
+      "webhookId": "3e4f9884-d984-48bb-ac7f-762f472de30f",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Monday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tuesday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wednesday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Thursday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Friday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Saturday",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sunday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Tuesday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wednesday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Thursday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Sunday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Friday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Saturday": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1  (Generate Email Content)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "AI Agent 1  (Generate Email Content)": {
+      "main": [
+        [
+          {
+            "node": "Email Fields (subject & body)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        []
+      ]
+    },
+    "Email Fields (subject & body)": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": true
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "f01d5b36-ef59-4787-b39a-f7b71e3ce7c8",
+  "activeVersionId": "f01d5b36-ef59-4787-b39a-f7b71e3ce7c8",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-09-10T16:50:15.191Z",
+      "createdAt": "2025-09-10T16:50:15.191Z",
+      "role": "workflow:owner",
+      "workflowId": "0lI40xZ82P2Ifvr7",
+      "projectId": "EcobcwWAxGXzBQMt"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-22T21:52:10.264Z",
+    "createdAt": "2026-01-22T21:52:10.264Z",
+    "versionId": "f01d5b36-ef59-4787-b39a-f7b71e3ce7c8",
+    "workflowId": "0lI40xZ82P2Ifvr7",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -16288,
+          1025.5
+        ],
+        "id": "85339d5c-fc2c-416e-89d0-52eecdcd8673",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "gpt-3.5-turbo",
+            "mode": "list",
+            "cachedResultName": "gpt-3.5-turbo"
+          },
+          "options": {
+            "temperature": 0.9
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          -15544,
+          528
+        ],
+        "id": "47babaf9-43e3-4f0f-ad95-58ac5319b456",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "veEsh5yte0PUtNY3",
+            "name": "OpenAi account 2"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Monday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "07868b61-3d3b-467f-b7f3-8490011e770c"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "53317511-84e8-4a3a-9b7e-ef56179a0bdf",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Tuesday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "d5394c53-63cc-4354-93d0-99996a9f1e5d",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Wednesday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "16fa2c01-c1b6-46ba-ab5f-b01b53fe006e",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Thursday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "4cb6fbf7-32e4-474b-b3d1-ff5d25690b40",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Friday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "8608f99e-f7e2-4ac3-b423-471bf1bfd4fb",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Saturday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "26e659eb-9793-48eb-ac42-eccbf59d239f",
+                      "leftValue": "={{$json[\"Day of week\"]}}",
+                      "rightValue": "Sunday",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -16064,
+          945.5
+        ],
+        "id": "7779a228-edde-48ed-a212-86e1e27793f4",
+        "name": "Switch",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f896017d-c0c7-40d5-b230-12c1ba4e5e54",
+                "name": "productName",
+                "value": "superfood wellness formula",
+                "type": "string"
+              },
+              {
+                "id": "dd5bcce0-6a8b-475a-98ec-1d8a1bdf2daa",
+                "name": "affiliateLink",
+                "value": "https://mdrnremedy.com/#aff=Igotwatuwant",
+                "type": "string"
+              },
+              {
+                "id": "68b86ef1-ba7b-4ad9-8739-a58cfcd6c555",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/PKM4L06W.png",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          1436
+        ],
+        "id": "e825c558-d6cf-4fdd-9592-69853d9dd1e5",
+        "name": "Friday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8d43fa5d-0515-452b-9e6c-5356ff871188",
+                "name": "productName",
+                "value": "online income course",
+                "type": "string"
+              },
+              {
+                "id": "beadf0e7-a532-46fc-92d7-404e15081e7f",
+                "name": "affiliateLink",
+                "value": "https://www.digistore24.com/redir/361682/Igotwatuwant/",
+                "type": "string"
+              },
+              {
+                "id": "f1a44258-5054-4adf-a515-b79c47615605",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/753WV7C5.png",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          1628
+        ],
+        "id": "5c832023-c38f-4ce7-ae27-41943133aa7b",
+        "name": "Saturday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "472db552-a384-4126-97ea-844a7c9bd2e8",
+                "name": "productName",
+                "value": "weight & metabolism booster",
+                "type": "string"
+              },
+              {
+                "id": "fce4a2bf-8ad4-455a-bb8e-f0d74d21579b",
+                "name": "affiliateLink",
+                "value": "https://getsumatratonic.com/welcome/#aff=Igotwatuwant",
+                "type": "string"
+              },
+              {
+                "id": "84fbdac5-5c81-46c1-a677-313c03447fc1",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/Z31C6LOM.png",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          668
+        ],
+        "id": "4d922303-5883-4f45-92a4-e011d28acc7e",
+        "name": "Tuesday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "62f4cf05-52fc-4ad1-bd6e-70e02859ba5a",
+                "name": "productName",
+                "value": "prostate men's health supplement",
+                "type": "string"
+              },
+              {
+                "id": "7780fe05-6744-4f34-aeaa-889f24c66065",
+                "name": "affiliateLink",
+                "value": "https://getfluxactive.cc/vslv1/#aff=Igotwatuwant",
+                "type": "string"
+              },
+              {
+                "id": "10574d02-bdbc-4a09-90b5-42a8bfd693ef",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/product-main-2.png",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          429.5
+        ],
+        "id": "1ff030d4-828e-4097-95c6-efdc816fd788",
+        "name": "Monday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "03f58a67-e35a-437c-900b-2ffc4c67ac07",
+                "name": "productName",
+                "value": "gut health & weight support",
+                "type": "string"
+              },
+              {
+                "id": "1f89a743-055f-4c35-b25a-02225905fcc1",
+                "name": "affiliateLink",
+                "value": "https://gutoptim24.com/text.php#aff=Igotwatuwant",
+                "type": "string"
+              },
+              {
+                "id": "d24593a0-52c5-4459-950e-038250c13836",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/1OCSG6OJ.png",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          860
+        ],
+        "id": "40d179d9-7f9a-4734-878a-c26f6c02fc15",
+        "name": "Wednesday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "084ceb39-a6b8-41b7-8d5b-c53bdfe41454",
+                "name": "productName",
+                "value": "business/you tube course ",
+                "type": "string"
+              },
+              {
+                "id": "94bc53f3-ccce-4ff7-be14-ae5281494fd3",
+                "name": "affiliateLink",
+                "value": "https://mattpar.com/tube-mastery-ds#aff=Igotwatuwant",
+                "type": "string"
+              },
+              {
+                "id": "d697659b-7556-4cbd-a356-32cfd5f0ced8",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/SQVYFZ6P.png",
+                "type": "string"
+              },
+              {
+                "id": "c40f8191-dc3b-40e2-9fae-f5f156be9228",
+                "name": " Email",
+                "value": "uses imageUrl",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          1052
+        ],
+        "id": "a58f64f3-7565-420d-b3f3-3236195b6741",
+        "name": "Thursday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "128c4291-ee1f-46ab-8582-bee660108e59",
+                "name": "productName",
+                "value": "crypto education & community",
+                "type": "string"
+              },
+              {
+                "id": "38a25e7f-7860-4932-bb06-6f33842ac84d",
+                "name": "affiliateLink",
+                "value": "https://www.digistore24.com/redir/363385/Igotwatuwant/",
+                "type": "string"
+              },
+              {
+                "id": "37f23c55-c289-497e-a65b-38ddd7afc3a0",
+                "name": " imageUrl",
+                "value": "https://pbscdcgxvkchsjenphdj.supabase.co/storage/v1/object/public/affiliate/image%20url/2Z70CKHM.jpg",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15840,
+          1244
+        ],
+        "id": "a17152aa-fc31-45ad-8a3f-bd0657957704",
+        "name": "Sunday",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=You are generating an affiliate email for THIS product ONLY.\n\nProduct name:\n{{$json.productName}}\n\nAffiliate link:\n{{$json.affiliateLink}}\n\nSTRICT RULES:\n- Use ONLY the product and link above\n- Do NOT invent products\n- Do NOT replace the affiliate link\n- If the link mentions back pain, write about back pain\n- If the link is skincare, write about skincare\n- Match the product category exactly\n\nFORMAT EXACTLY LIKE THIS:\n\nSUBJECT:\n<one compelling subject line>\n\nBODY:\n<short persuasive body explaining what it helps with, who it's for, key benefits>\n\nPRODUCT_NAME:\n{{$json.productName}}\n\nAFFILIATE_LINK:\n{{$json.affiliateLink}}\n\nimageUrl\n{{ $json[' imageUrl'] }}\n\nDo not explain.\nDo not add anything else.\n",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          -15616,
+          304
+        ],
+        "id": "ef219f11-7f86-47b9-8b84-2bbb92c9c2d5",
+        "name": "AI Agent 1  (Generate Email Content)",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -15264,
+          1032
+        ],
+        "id": "49c40c64-da19-43a7-965d-4523634e1de9",
+        "name": "Merge",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "fromEmail": "offers@dealdily.com",
+          "toEmail": "saleh852@gmail.com",
+          "subject": "={{ $json.subject }} ",
+          "html": "=<h2>{{ $json.subject }}</h2>\n\n<p>{{ $json.body }}</p>\n\n<p><strong>Product:</strong> {{ $json.productName }}</p>\n\n<p>\n  <a href=\"{{ $json.affiliateLink }}\"\n     style=\"padding:12px 18px;background:#0b5cff;color:#fff;\n     text-decoration:none;border-radius:6px;font-weight:bold;\">\n     👉 Shop Now\n  </a>\n</p>\n\n<p style=\"font-size:12px;color:#777;\">\nIf the button doesn’t work, copy & paste:<br>\n{{ $json.affiliateLink }}\n</p>\n\n<img \n  src=\"{{ $json.imageUrl }}\" \n  alt=\"Product image\"\n  style=\"\n    width:100%;\n    max-width:600px;\n    display:block;\n    margin:0 auto 20px auto;\n    border-radius:12px;\n  \"\n/>\n\n<p style=\"font-size:12px;color:#666;\">\nIf you no longer want these emails, \n<a href=\"https://yourdomain.com/unsubscribe?email={{$json.email}}\">\nunsubscribe here\n</a>.\n</p>\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2.1,
+        "position": [
+          -14144,
+          716
+        ],
+        "id": "24a755a1-3e0a-4b27-bf0c-c366922a255b",
+        "name": "Send email",
+        "webhookId": "04add016-39dd-4dd6-a364-70e2b8a4bf71",
+        "credentials": {
+          "smtp": {
+            "id": "q8fNt7fNGWmNfpoD",
+            "name": "SMTP account 2"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get AI output text\nconst text = $json.output;\n\n// Helper to extract values after labels\nfunction extract(label) {\n  const idx = text.indexOf(label);\n  if (idx === -1) return \"\";\n  return text\n    .slice(idx + label.length)\n    .trim()\n    .split(\"\\n\")[0]\n    .trim();\n}\n\n// n8n REQUIRES returning an ARRAY\n  return [\n  {\n    subject: extract(\"SUBJECT:\"),\n    body: extract(\"BODY:\"),\n    productName: extract(\"PRODUCT_NAME:\"),\n    affiliateLink: extract(\"AFFILIATE_LINK:\")\n    // ❌ NO imageUrl here\n  }\n];\n\n\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -15040,
+          256
+        ],
+        "id": "f9e071a9-86cc-4e4e-8d40-0f33a24b3b0a",
+        "name": "Email Fields (subject & body)",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "f70be1aa-d157-4587-ad07-1e0451c95477",
+                "name": "imageUrl",
+                "value": "={{ $json[' imageUrl'] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -15040,
+          1032
+        ],
+        "id": "5946d072-6553-4070-a92a-d7d597a9b2e1",
+        "name": "Edit Fields3",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -14816,
+          716
+        ],
+        "id": "dd99670d-c0e2-439f-9208-fda038d169b6",
+        "name": "Merge1",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -14592,
+          716
+        ],
+        "id": "724f0a9d-66d2-4a91-a28f-a0303fa977e0",
+        "name": "Loop Over Items",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "amount": 30,
+          "unit": "minutes"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -14368,
+          716
+        ],
+        "id": "18b20877-b1cd-4c7a-ae75-41ee34163013",
+        "name": "Wait",
+        "webhookId": "3e4f9884-d984-48bb-ac7f-762f472de30f",
+        "disabled": true
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Monday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Tuesday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wednesday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Thursday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Friday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Saturday",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Sunday",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Monday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Tuesday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Wednesday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Thursday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Sunday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Friday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Saturday": {
+        "main": [
+          [
+            {
+              "node": "AI Agent 1  (Generate Email Content)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "AI Agent 1  (Generate Email Content)": {
+        "main": [
+          [
+            {
+              "node": "Email Fields (subject & body)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send email": {
+        "main": [
+          []
+        ]
+      },
+      "Email Fields (subject & body)": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields3": {
+        "main": [
+          [
+            {
+              "node": "Merge1",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Merge1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Send email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "saleh saleh",
+    "name": null,
+    "description": null
+  },
+  "tags": []
+}
